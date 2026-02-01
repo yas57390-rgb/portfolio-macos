@@ -24,38 +24,41 @@ import ImageViewer from '../apps/ImageViewer';
 import ModelViewerApp from '../apps/ModelViewerApp';
 import Maps from '../apps/Maps';
 import Gallery from '../apps/Gallery';
-
+import WelcomeApp from '../apps/WelcomeApp';
 
 const WindowManager = () => {
-    const { windows, activeWindowId } = useOS();
+    const { windows, activeWindowId, closeWindow } = useOS();
 
-    const renderApp = (window) => {
-        switch (window.appId) {
+    const renderApp = (win) => {
+        const handleClose = () => closeWindow(win.id);
+
+        switch (win.appId) {
             case 'finder': return <Finder />;
-            case 'terminal': return <Terminal windowState={window.state} />;
+            case 'terminal': return <Terminal windowState={win.state} />;
             case 'contact': return <Contact />;
             case 'settings': return <Settings />;
             case 'trash': return <Trash />;
-            case 'pdf-viewer': return <PDFViewer file={window.file} />;
+            case 'pdf-viewer': return <PDFViewer file={win.file} />;
             case 'about': return <About />;
             case 'music': return <Music />;
             case 'rss': return <RSSReader />;
-            case 'vscode': return <VSCode file={window.file} />;
-            case 'game-center': return <GameCenter windowState={window.state} />;
+            case 'vscode': return <VSCode file={win.file} />;
+            case 'game-center': return <GameCenter windowState={win.state} />;
             case 'video-player': return <VideoPlayer />;
             case 'calculator': return <Calculator />;
             case 'notes': return <Notes />;
             case 'it-toolkit': return <ITToolkit />;
-            case 'image-viewer': return <ImageViewer file={window.file} />;
-            case 'model-viewer': return <ModelViewerApp file={window.file} windowId={window.id} windowState={window.state} />;
+            case 'image-viewer': return <ImageViewer file={win.file} />;
+            case 'model-viewer': return <ModelViewerApp file={win.file} windowId={win.id} windowState={win.state} />;
             case 'maps': return <Maps />;
             case 'gallery': return <Gallery />;
+            case 'welcome': return <WelcomeApp onClose={handleClose} />;
 
             default:
-                if (window.content) {
-                    return window.content;
+                if (win.content) {
+                    return win.content;
                 }
-                return <div className="p-10 text-center">App not found: {window.appId}</div>;
+                return <div className="p-10 text-center">App not found: {win.appId}</div>;
         }
     };
 
@@ -75,3 +78,4 @@ const WindowManager = () => {
 };
 
 export default WindowManager;
+
