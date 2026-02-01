@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset & Base */
+body {
+  @apply m-0 p-0 overflow-hidden font-sans;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Utilities */
+.glass {
+  @apply backdrop-filter backdrop-blur-md bg-white/60 dark:bg-black/60 border border-white/20 dark:border-white/10 shadow-lg transition-colors duration-300;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400/50 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400/80;
+}
