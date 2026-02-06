@@ -1,6 +1,7 @@
 import React from 'react';
 import Cubes from '../../ui/Cubes';
 import GlassContainer from '../GlassContainer';
+import MetallicPaint from '../../effects/MetallicPaint';
 
 // Shared layout for consistency
 const SlideContainer = ({ title, children, scrollable = false }) => (
@@ -125,124 +126,174 @@ const sieLogoMap = [
     [W, W, W, W, W, W, B, B, B, B],
 ];
 
-export const SIESlide = () => (
-    <SlideContainer title="Mon Alternance chez SIE" scrollable={true}>
-        <p>J'évolue actuellement au sein de l'entreprise <strong>Solutions Informatiques et Expertises</strong>.</p>
+export const SIESlide = () => {
+    // Tuned parameters for Liquid Metal Effect
+    const effectParams = {
+        scale: 4,
+        patternSharpness: 1,
+        noiseScale: 0.5,
+        speed: 0.3,
+        liquid: 0.75,
+        brightness: 3.5,
+        contrast: 1.5,
+        refraction: 0.01,
+        blur: 0.015,
+        chromaticSpread: 2,
+        fresnel: 1,
+        angle: 0,
+        waveAmplitude: 1,
+        distortion: 1,
+        contour: 0.2,
+        lightColor: "#ffffff",
+        darkColor: "#cccccc",
+        tintColor: "#ffffff",
+        mouseAnimation: true // Enable by default for presentation
+    };
 
-        {/* Logo Container */}
-        <div className="flex items-center justify-center gap-24 mt-4 w-full flex-shrink-0">
-            {/* Rotated Diamond Logo - 45 degrees */}
-            <div className="w-[280px] h-[280px] relative flex items-center justify-center">
-                <div className="transform -rotate-45 scale-[0.55] hover:scale-[0.6] transition-transform duration-500">
-                    <Cubes
-                        gridSize={10}
-                        cubeSize={26}
-                        maxAngle={60}
-                        radius={5}
-                        borderStyle="none"
-                        shadow={true}
-                        faceColor="#1a1a2e"
-                        rippleColor="#ffffff"
-                        rippleSpeed={1.5}
-                        autoAnimate={true}
-                        rippleOnClick={true}
-                        colorMap={sieLogoMap}
-                        rotationDeg={-45}
-                    />
+    return (
+        <div className="w-full h-full flex flex-col items-center select-none overflow-hidden">
+            {/* Title - Fixed at top */}
+            <h2 className="text-4xl font-semibold mb-6 text-white tracking-tight flex-shrink-0 drop-shadow-md z-10 text-center mt-2">Mon Alternance chez SIE</h2>
+
+            {/* Main Content - 2 Column Grid */}
+            <div className="flex-1 w-full px-12 pb-8 overflow-hidden">
+                <div className="grid grid-cols-[450px_1fr] gap-12 h-full">
+
+                    {/* LEFT COLUMN - Sticky / Visual Anchor */}
+                    <div className="flex flex-col h-full bg-white/5 rounded-3xl border border-white/10 p-8 relative overflow-hidden">
+                        {/* Background Decor */}
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+
+                        {/* Liquid Metal Logo */}
+                        <div className="w-full aspect-square relative rounded-2xl overflow-hidden shadow-2xl border border-white/20 mb-8 bg-black/40">
+                            <MetallicPaint
+                                imageSrc="/assets/SIE_H_N_RVB.png"
+                                {...effectParams}
+                            />
+                        </div>
+
+                        {/* Company Info */}
+                        <div className="mt-auto">
+                            <h1 className="text-6xl font-extrabold text-white tracking-tight mb-2">SIE</h1>
+                            <p className="text-blue-300 text-lg font-medium mb-4">Solutions Informatiques et Expertises</p>
+
+                            <div className="space-y-3 border-t border-white/10 pt-6">
+                                <div className="flex justify-between items-center text-sm text-gray-300">
+                                    <span>Domaines</span>
+                                    <span className="font-semibold text-white">Infogérance • Audit • Formation</span>
+                                </div>
+                                <div className="flex justify-between items-center text-sm text-gray-300">
+                                    <span>Envergure</span>
+                                    <span className="font-semibold text-white">+230 organisations</span>
+                                </div>
+                                <div className="flex justify-between items-center text-sm text-gray-300">
+                                    <span>Parc géré</span>
+                                    <span className="font-semibold text-white">+2000 postes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* RIGHT COLUMN - Scrollable Content */}
+                    <div className="h-full overflow-y-auto scrollbar-hide pr-2 space-y-6">
+                        {/* Header Text */}
+                        <p className="text-xl text-gray-200 leading-relaxed font-light">
+                            J'évolue actuellement au sein de <strong className="text-white font-semibold">SIE</strong>,
+                            une ESN à taille humaine où j'ai pu transformer mon stage en alternance.
+                        </p>
+
+                        {/* Mon Parcours */}
+                        <div className="bg-gradient-to-r from-[#1E293B] to-[#0F172A] p-6 rounded-2xl border border-white/10 shadow-lg relative overflow-hidden group hover:border-blue-500/30 transition-colors">
+                            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-500"></div>
+                            <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span className="text-blue-400">01.</span> Mon Parcours
+                            </h3>
+                            <div className="flex items-center gap-4 text-sm text-gray-300 bg-black/20 p-3 rounded-lg border border-white/5">
+                                <div className="flex-1 text-center">
+                                    <span className="block text-xs uppercase tracking-wide text-gray-500 mb-1">Été 2024</span>
+                                    <strong className="text-white bg-white/10 px-2 py-0.5 rounded">Stage</strong>
+                                </div>
+                                <div className="text-gray-600">➔</div>
+                                <div className="flex-1 text-center">
+                                    <span className="block text-xs uppercase tracking-wide text-gray-500 mb-1">Depuis Sept. 2025</span>
+                                    <strong className="text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">Alternance</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Mon Rôle - Grid Layout */}
+                        <div className="bg-[#1E1E24] p-6 rounded-2xl border border-white/10 shadow-lg">
+                            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <span className="text-purple-400">02.</span> Mon Rôle : Technicien S&R
+                            </h3>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors">
+                                    <div className="text-purple-400 text-xl mb-2">🆘</div>
+                                    <strong className="block text-white text-sm">Helpdesk N1/N2</strong>
+                                    <span className="text-xs text-gray-400">Résolution tickets & assistance</span>
+                                </div>
+                                <div className="bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors">
+                                    <div className="text-blue-400 text-xl mb-2">🚗</div>
+                                    <strong className="block text-white text-sm">Itinérance</strong>
+                                    <span className="text-xs text-gray-400">Interventions sur site client</span>
+                                </div>
+                                <div className="bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors">
+                                    <div className="text-green-400 text-xl mb-2">🚀</div>
+                                    <strong className="block text-white text-sm">Déploiement</strong>
+                                    <span className="text-xs text-gray-400">Postes, NAS, Firewalls, Switchs</span>
+                                </div>
+                                <div className="bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors">
+                                    <div className="text-orange-400 text-xl mb-2">🔌</div>
+                                    <strong className="block text-white text-sm">Infrastructure</strong>
+                                    <span className="text-xs text-gray-400">Câblage & Baies de brassage</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Split Section: Avantages & Outils */}
+                        <div className="grid grid-cols-1 gap-6">
+                            {/* NinjaOne */}
+                            <div className="bg-gradient-to-br from-[#2D1B14] to-[#1A100C] p-5 rounded-2xl border border-orange-500/20 shadow-lg relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl rotate-12">🥷</div>
+                                <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2 relative z-10">
+                                    <span className="text-orange-500">⚡</span> NinjaOne
+                                </h3>
+                                <p className="text-sm text-gray-300 mb-3 relative z-10">Notre couteau suisse RMM pour la gestion de parc unifiée.</p>
+                                <div className="flex flex-wrap gap-2 relative z-10">
+                                    <span className="text-xs font-mono bg-orange-500/20 text-orange-200 px-2 py-1 rounded border border-orange-500/30">Monitoring</span>
+                                    <span className="text-xs font-mono bg-orange-500/20 text-orange-200 px-2 py-1 rounded border border-orange-500/30">Patching</span>
+                                    <span className="text-xs font-mono bg-orange-500/20 text-orange-200 px-2 py-1 rounded border border-orange-500/30">Remote</span>
+                                </div>
+                            </div>
+
+                            {/* Avantages ESN */}
+                            <div className="bg-[#1A1A2E] p-5 rounded-2xl border border-white/10 shadow-lg">
+                                <h3 className="text-lg font-bold text-white mb-3">La Force de l'ESN</h3>
+                                <ul className="space-y-3">
+                                    <li className="flex items-start gap-3">
+                                        <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 text-xs mt-0.5">1</div>
+                                        <span className="text-sm text-gray-300">
+                                            <strong className="text-white block">Diversité Technique</strong>
+                                            Pas de routine : chaque client a son infra spécifique (Cisco, Ubiquiti, Sophos...).
+                                        </span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-xs mt-0.5">2</div>
+                                        <span className="text-sm text-gray-300">
+                                            <strong className="text-white block">Autonomie accélérée</strong>
+                                            Responsabilités réelles sur des incidents critiques dès la première année.
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-
-            {/* SIE Text */}
-            <div className="text-left max-w-sm">
-                <h1 className="text-7xl font-extrabold text-white tracking-tight" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-                    SIE
-                </h1>
-                <p className="text-blue-300 mt-2 text-base font-medium">
-                    Solutions Informatiques et Expertises
-                </p>
-                <p className="mt-3 text-sm text-gray-400">
-                    Infogérance • Audit • Formation • Vente IT
-                </p>
-                <p className="mt-1 text-sm">
-                    <strong className="text-blue-400">+230 organisations</strong> • <strong className="text-blue-400">+2000 postes</strong>
-                </p>
-            </div>
         </div>
-
-        {/* Mon Parcours */}
-        <div className="mt-6 text-left w-full bg-gradient-to-r from-blue-500/10 to-transparent p-4 rounded-xl border-l-4 border-blue-500">
-            <h3 className="text-lg font-bold text-white mb-2">Mon Parcours</h3>
-            <p className="text-sm text-gray-300">
-                J'ai débuté chez SIE en <strong className="text-white">stage de juillet à septembre 2024</strong>,
-                une expérience qui a directement débouché sur mon <strong className="text-blue-400">contrat d'alternance depuis septembre 2025</strong>.
-            </p>
-        </div>
-
-        {/* Mon Rôle */}
-        <div className="mt-4 text-left w-full bg-white/5 p-4 rounded-xl border border-white/10">
-            <h3 className="text-lg font-bold text-blue-400 mb-2">Mon Rôle — Alternant Technicien Systèmes et Réseaux</h3>
-            <div className="grid grid-cols-2 gap-3 text-sm text-gray-300">
-                <div className="flex items-start gap-2">
-                    <span className="text-blue-400">▸</span>
-                    <span><strong>Support Helpdesk</strong> - Assistance utilisateurs, résolution de tickets</span>
-                </div>
-                <div className="flex items-start gap-2">
-                    <span className="text-blue-400">▸</span>
-                    <span><strong>Technicien itinérant</strong> - Interventions sur site chez les clients</span>
-                </div>
-                <div className="flex items-start gap-2">
-                    <span className="text-blue-400">▸</span>
-                    <span><strong>Déploiement</strong> - Postes, NAS, Firewalls, Switchs, ENI</span>
-                </div>
-                <div className="flex items-start gap-2">
-                    <span className="text-blue-400">▸</span>
-                    <span><strong>Infrastructure</strong> - Câblage, prises RJ45, baies de brassage</span>
-                </div>
-            </div>
-        </div>
-
-        {/* Avantage ESN */}
-        <div className="mt-4 text-left w-full bg-gradient-to-r from-purple-500/10 to-transparent p-4 rounded-xl border-l-4 border-purple-500">
-            <h3 className="text-lg font-bold text-white mb-2">L'avantage de travailler en ESN</h3>
-            <p className="text-sm text-gray-300 mb-2">
-                Travailler dans une <strong className="text-purple-400">Entreprise de Services du Numérique</strong> me permet d'être confronté à une <strong className="text-white">diversité exceptionnelle</strong> :
-            </p>
-            <ul className="text-sm text-gray-300 space-y-1">
-                <li>• <strong>Infrastructures variées</strong> - Chaque client a son propre environnement</li>
-                <li>• <strong>Software spécifiques</strong> - ERP, logiciels métiers, solutions cloud diverses</li>
-                <li>• <strong>Matériel réseau différent</strong> - Cisco, Ubiquiti, TP-Link, Zyxel, Netgear...</li>
-                <li>• <strong>Fonctionnements uniques</strong> - Mairies, écoles, usines, pharmacies, PME...</li>
-            </ul>
-            <p className="text-sm text-gray-300 mt-3">
-                Je ne suis <strong className="text-white">pas cloisonné dans une seule infrastructure</strong>, ce qui enrichit considérablement mon expérience !
-            </p>
-        </div>
-
-        {/* Autonomie */}
-        <div className="mt-4 text-left w-full bg-gradient-to-r from-green-500/10 to-transparent p-4 rounded-xl border-l-4 border-green-500">
-            <h3 className="text-lg font-bold text-white mb-2">Autonomie et responsabilités</h3>
-            <p className="text-sm text-gray-300">
-                J'ai la chance d'effectuer des <strong className="text-green-400">tâches en autonomie bien plus complexes</strong> que ce qu'un alternant en BTS est habituellement amené à faire :
-                interventions seul chez les clients, diagnostic et résolution de pannes critiques, participation au déploiement d'infrastructures réseau...
-            </p>
-        </div>
-
-        {/* NinjaOne */}
-        <div className="mt-4 text-left w-full bg-gradient-to-r from-orange-500/10 to-transparent p-4 rounded-xl border-l-4 border-orange-500 mb-4">
-            <h3 className="text-lg font-bold text-white mb-2">Notre outil — NinjaOne</h3>
-            <p className="text-sm text-gray-300 mb-2">
-                Nous utilisons <strong className="text-orange-400">NinjaOne</strong>, une plateforme tout-en-un pour la gestion IT :
-            </p>
-            <div className="flex flex-wrap gap-2 text-xs">
-                <span className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full">Gestion de parc</span>
-                <span className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full">Ticketing</span>
-                <span className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full">Monitoring</span>
-                <span className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full">RMM</span>
-                <span className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full">Déploiement</span>
-            </div>
-        </div>
-    </SlideContainer>
-);
+    );
+};
 
 // --- New Slide Implementations ---
 

@@ -25,6 +25,7 @@ import ModelViewerApp from '../apps/ModelViewerApp';
 import Maps from '../apps/Maps';
 import Gallery from '../apps/Gallery';
 import WelcomeApp from '../apps/WelcomeApp';
+import LogoEffectApp from '../apps/LogoEffectApp';
 
 const WindowManager = () => {
     const { windows, activeWindowId, closeWindow } = useOS();
@@ -53,6 +54,7 @@ const WindowManager = () => {
             case 'maps': return <Maps />;
             case 'gallery': return <Gallery />;
             case 'welcome': return <WelcomeApp onClose={handleClose} initialSlide={win.initialSlide || 0} />;
+            case 'logo-effect': return <LogoEffectApp />;
 
             default:
                 if (win.content) {

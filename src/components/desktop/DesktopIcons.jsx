@@ -35,10 +35,9 @@ const DesktopIcons = () => {
     const { files, moveFileToTrash, moveFile, updateFilePosition } = useFileSystem();
 
     const shortcuts = [
-        { id: 'it-toolkit', title: 'App Store', type: 'app', action: 'open-window', windowId: 'it-toolkit', x: 20, y: 20, defaultSize: { width: 950, height: 640 } },
-        { id: 'model-viewer', title: '3D Viewer', type: 'app', action: 'open-window', windowId: 'model-viewer', x: 20, y: 240 },
-        { id: 'maps', title: 'Maps', type: 'app', action: 'open-window', windowId: 'maps', x: 20, y: 130, defaultSize: { width: 800, height: 600 } },
 
+
+        { id: 'logo-effect', title: 'Logo Effect', type: 'app', action: 'open-window', windowId: 'logo-effect', x: 20, y: 20, defaultSize: { width: 800, height: 600 } },
         { id: 'github', title: 'GitHub', type: 'link', action: 'open-link', url: 'https://github.com/Yassinedinar', x: 20, y: 350 },
         { id: 'linkedin', title: 'LinkedIn', type: 'link', action: 'open-link', url: 'https://www.linkedin.com/in/yassine-dinar', x: 20, y: 440 },
     ];
@@ -58,6 +57,7 @@ const DesktopIcons = () => {
         if (file.id === 'it-toolkit') return <AppIcon id="it-toolkit" size={56} />;
         if (file.id === 'model-viewer') return <AppIcon id="model-viewer" size={56} />;
         if (file.id === 'maps') return <AppIcon id="maps" size={56} />;
+        if (file.id === 'logo-effect') return <AppIcon id="it-toolkit" size={56} />;
 
         if (file.id === 'github') return <AppIcon id="github" size={56} />;
         if (file.id === 'linkedin') return <AppIcon id="linkedin" size={56} />;
