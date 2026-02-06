@@ -8,6 +8,9 @@ const Dock = () => {
     const [bouncingId, setBouncingId] = useState(null);
     const dockRef = useRef(null);
 
+    // Hide dock when a window is in kiosk mode
+    const hasKioskWindow = windows.some(w => w.isKioskMode);
+
     const dockItems = [
         { id: 'finder', title: 'Finder', icon: <AppIcon id="finder" size={48} />, defaultSize: { width: 900, height: 600 } },
         { id: 'it-toolkit', title: 'App Store', icon: <AppIcon id="it-toolkit" size={48} />, defaultSize: { width: 950, height: 640 } },
@@ -34,6 +37,9 @@ const Dock = () => {
     };
 
     const isOpen = (id) => windows.some(w => w.appId === id);
+
+    // Don't render dock if kiosk mode is active
+    if (hasKioskWindow) return null;
 
     return (
         <div className="absolute bottom-2 left-0 right-0 flex justify-center z-50 w-full">

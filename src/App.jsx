@@ -39,15 +39,17 @@ const DesktopWithWelcome = ({ showLockScreen, onLockScreenComplete }) => {
   const [welcomeOpened, setWelcomeOpened] = useState(false);
 
   // Open WelcomeApp after lock screen
-  const openWelcomeApp = useCallback(() => {
+  const openWelcomeApp = useCallback((initialSlide = 0) => {
     const onboardingComplete = localStorage.getItem('onboardingComplete');
     if (onboardingComplete !== 'true' && !welcomeOpened) {
       setWelcomeOpened(true);
       openWindow({
         id: 'welcome',
+        appId: 'welcome',
         title: 'Bienvenue',
         icon: '👋',
-        component: WelcomeApp,
+        isKioskMode: true, // Mode plein écran spécial
+        initialSlide: initialSlide,
         defaultSize: { width: 900, height: 650 },
       });
     }

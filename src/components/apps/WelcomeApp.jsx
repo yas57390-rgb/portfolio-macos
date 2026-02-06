@@ -92,9 +92,43 @@ function MonParcoursContent() {
     );
 }
 
-const WelcomeApp = ({ onClose }) => {
-    const [currentSlide, setCurrentSlide] = useState(0);
+const WelcomeApp = ({ onClose, initialSlide = 0 }) => {
+    const [currentSlide, setCurrentSlide] = useState(initialSlide);
     const [direction, setDirection] = useState(0);
+
+    // Listen for menu bar navigation events
+    useEffect(() => {
+        const handleGotoSlide = (e) => {
+            const slideId = e.detail?.slideId;
+            if (slideId !== undefined && slideId !== currentSlide) {
+                setDirection(slideId > currentSlide ? 1 : -1);
+                setCurrentSlide(slideId);
+            }
+        };
+
+        window.addEventListener('welcome-goto-slide', handleGotoSlide);
+        return () => window.removeEventListener('welcome-goto-slide', handleGotoSlide);
+    }, [currentSlide]);
+
+    // Keyboard navigation with arrow keys
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'ArrowRight') {
+                if (currentSlide < SLIDES.length - 1) {
+                    setDirection(1);
+                    setCurrentSlide(prev => prev + 1);
+                }
+            } else if (e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    setDirection(-1);
+                    setCurrentSlide(prev => prev - 1);
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [currentSlide]);
 
     const goToSlide = (index) => {
         setDirection(index > currentSlide ? 1 : -1);

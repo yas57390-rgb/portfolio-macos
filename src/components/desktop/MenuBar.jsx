@@ -10,24 +10,48 @@ import { FaPlay, FaPause, FaVolumeUp } from 'react-icons/fa';
 
 
 const MenuBar = ({ toggleSiri, currentStep, onStepChange }) => {
-    // ... hooks unchanged ...
-    const { openWindow } = useOS();
+    const { openWindow, windows, focusWindow, updateWindow } = useOS();
     const { isPlaying, togglePlay, volume, setVolume, currentStation } = useMusic();
     const [time, setTime] = useState(new Date());
     const [showMusicMenu, setShowMusicMenu] = useState(false);
     const musicMenuRef = useRef(null);
     const menubarRef = useRef(null);
 
-    const steps = [
-        { id: 1, label: 'Intro' },
-        { id: 2, label: 'SIE' },
-        { id: 3, label: 'CV' },
-        { id: 4, label: 'Portfolio' },
-        { id: 5, label: 'Certifs' },
-        { id: 6, label: 'Veille' },
-        { id: 7, label: 'Guide' },
-        { id: 8, label: 'Contact' }
+    // Slides for navigation - maps to WelcomeApp slides
+    const slides = [
+        { id: 0, label: 'Intro' },
+        { id: 1, label: 'SIE' },
+        { id: 2, label: 'CV' },
+        { id: 3, label: 'Portfolio' },
+        { id: 4, label: 'Certifs' },
+        { id: 5, label: 'Veille' },
+        { id: 6, label: 'Guide' },
+        { id: 7, label: 'Contact' }
     ];
+
+    const handleSlideClick = (slideId) => {
+        // Check if WelcomeApp is already open
+        const welcomeWindow = windows.find(w => w.appId === 'welcome');
+
+        if (welcomeWindow) {
+            // Update the initialSlide and focus the window
+            updateWindow(welcomeWindow.id, { initialSlide: slideId });
+            focusWindow(welcomeWindow.id);
+            // Dispatch event to notify WelcomeApp to change slide
+            window.dispatchEvent(new CustomEvent('welcome-goto-slide', { detail: { slideId } }));
+        } else {
+            // Open WelcomeApp on the specified slide
+            openWindow({
+                id: 'welcome',
+                appId: 'welcome',
+                title: 'Bienvenue',
+                icon: '👋',
+                isKioskMode: true,
+                initialSlide: slideId,
+                defaultSize: { width: 900, height: 650 },
+            });
+        }
+    };
 
     useEffect(() => {
         const interval = setInterval(() => setTime(new Date()), 1000);
@@ -44,6 +68,10 @@ const MenuBar = ({ toggleSiri, currentStep, onStepChange }) => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    // Hide menu bar when a window is in kiosk mode (MUST be after all hooks!)
+    const hasKioskWindow = windows.some(w => w.isKioskMode);
+    if (hasKioskWindow) return null;
 
     return (
         <div
@@ -66,22 +94,16 @@ const MenuBar = ({ toggleSiri, currentStep, onStepChange }) => {
                     <FaApple size={16} className="mb-[1px]" />
                 </button>
 
-                {/* Onboarding Navigation Links Replaces Standard Menus */}
-                {steps.map((step) => {
-                    const isActive = currentStep === step.id;
-                    return (
-                        <button
-                            key={step.id}
-                            onClick={() => onStepChange && onStepChange(step.id)}
-                            className={`
-                                relative px-3 py-0.5 rounded text-[13px] font-medium transition-all duration-200 outline-none
-                                ${isActive ? 'bg-white/10 text-white shadow-sm' : 'text-white/90 hover:bg-white/5'}
-                            `}
-                        >
-                            {step.label}
-                        </button>
-                    );
-                })}
+                {/* Onboarding Navigation Links */}
+                {slides.map((slide) => (
+                    <button
+                        key={slide.id}
+                        onClick={() => handleSlideClick(slide.id)}
+                        className="relative px-3 py-0.5 rounded text-[13px] font-medium transition-all duration-200 outline-none text-white/90 hover:bg-white/10"
+                    >
+                        {slide.label}
+                    </button>
+                ))}
             </div>
 
             {/* Right Side */}

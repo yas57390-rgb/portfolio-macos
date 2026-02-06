@@ -52,7 +52,7 @@ const WindowManager = () => {
             case 'model-viewer': return <ModelViewerApp file={win.file} windowId={win.id} windowState={win.state} />;
             case 'maps': return <Maps />;
             case 'gallery': return <Gallery />;
-            case 'welcome': return <WelcomeApp onClose={handleClose} />;
+            case 'welcome': return <WelcomeApp onClose={handleClose} initialSlide={win.initialSlide || 0} />;
 
             default:
                 if (win.content) {

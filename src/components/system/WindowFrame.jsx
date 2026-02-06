@@ -10,6 +10,7 @@ const WindowFrame = ({ window: win, isTopRanked, children }) => {
     const resizeRef = useRef({ startX: 0, startY: 0, startWidth: 0, startHeight: 0 });
 
     const isActive = activeWindowId === win.id;
+    const isKioskMode = win.isKioskMode === true;
 
     const startResize = (e) => {
         e.preventDefault();
@@ -46,32 +47,28 @@ const WindowFrame = ({ window: win, isTopRanked, children }) => {
         };
     }, [isResizing, win.id, resizeWindow]);
 
-    // Force remove transform when maximized to fix layout shifting
+    // Force remove transform when maximized or in kiosk mode
     useEffect(() => {
-        if (win.isMaximized && nodeRef.current) {
+        if ((win.isMaximized || isKioskMode) && nodeRef.current) {
             nodeRef.current.style.setProperty('transform', 'none', 'important');
-        } else if (!win.isMaximized && nodeRef.current) {
-            // allow react/draggable to reclaim control. 
+        } else if (!win.isMaximized && !isKioskMode && nodeRef.current) {
             nodeRef.current.style.transform = '';
         }
-    }, [win.isMaximized]);
+    }, [win.isMaximized, isKioskMode]);
 
     // Style Classification
-    const isLegacyStyle = false; // Forced universality
-
-    // Optimized Logic: TEMPORARILY DISABLED TO INTERROGATE RENDERING ISSUE
-    const shouldUseGlass = currentWindowStyle === 'glass' && !isLegacyStyle; // && isActive;
+    const isLegacyStyle = false;
+    const shouldUseGlass = currentWindowStyle === 'glass' && !isLegacyStyle;
 
     const getTitleBarClass = () => {
         const base = "window-title-bar h-10 w-full flex items-center px-4 space-x-2 cursor-default border-b select-none";
-
         return `${base} bg-transparent border-b border-black/20`;
     };
 
     const getTitleTextClass = () => {
         const base = "flex-1 text-center text-sm font-semibold pointer-events-none select-none";
         if (isLegacyStyle) return `${base} text-gray-700 dark:text-gray-200`;
-        return `${base} text-slate-200`; // Premium & Self Managed
+        return `${base} text-slate-200`;
     };
 
     const getContentClass = () => {
@@ -81,6 +78,53 @@ const WindowFrame = ({ window: win, isTopRanked, children }) => {
             return `${base} bg-slate-900/90`;
         }
         return `${base} bg-transparent`;
+    };
+
+    // Compute window styles based on mode
+    const getWindowStyle = () => {
+        const baseStyle = {
+            zIndex: win.zIndex,
+            position: 'absolute',
+            background: 'rgba(30, 30, 30, 0.70)',
+            backdropFilter: 'blur(25px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(25px) saturate(180%)',
+            boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1), 0 20px 50px rgba(0, 0, 0, 0.55)',
+        };
+
+        // Kiosk mode: fullscreen, occupe TOUT l'écran
+        if (isKioskMode) {
+            return {
+                ...baseStyle,
+                position: 'fixed',
+                top: 0, // Tout en haut
+                left: 0,
+                right: 0,
+                bottom: 0,
+                width: '100%',
+                height: '100vh', // Tout l'écran
+                borderRadius: 0,
+                zIndex: 9999,
+            };
+        }
+
+        // Normal maximized
+        if (win.isMaximized) {
+            return {
+                ...baseStyle,
+                width: '100%',
+                height: 'calc(100% - 6rem)',
+                top: '2rem',
+                left: 0,
+                borderRadius: 0,
+            };
+        }
+
+        // Normal window
+        return {
+            ...baseStyle,
+            width: win.size.width,
+            height: win.size.height,
+        };
     };
 
     const renderWindowContent = () => (
@@ -95,7 +139,7 @@ const WindowFrame = ({ window: win, isTopRanked, children }) => {
                 <div className={getTitleTextClass()}>
                     {win.title}
                 </div>
-                <div className="w-16"></div> {/* Spacer for symmetry */}
+                <div className="w-16"></div>
             </div>
 
             {/* Content */}
@@ -103,8 +147,8 @@ const WindowFrame = ({ window: win, isTopRanked, children }) => {
                 {children}
             </div>
 
-            {/* Resize Handle */}
-            {!win.isMaximized && (
+            {/* Resize Handle - Hidden in kiosk mode */}
+            {!win.isMaximized && !isKioskMode && (
                 <div
                     className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize flex items-end justify-end p-0.5 z-50"
                     onMouseDown={startResize}
@@ -124,25 +168,13 @@ const WindowFrame = ({ window: win, isTopRanked, children }) => {
             defaultPosition={{ x: win.position.x, y: win.position.y }}
             onMouseDown={() => focusWindow(win.id)}
             onStop={(e, data) => moveWindow(win.id, { x: data.x, y: data.y })}
-            disabled={isResizing || win.isMaximized}
+            disabled={isResizing || win.isMaximized || isKioskMode}
             bounds="parent"
         >
-            {/* Window Container (Native macOS Dark Mode Style) */}
             <div
                 ref={nodeRef}
-                className={`flex flex-col rounded-xl overflow-hidden shadow-2xl transition-all duration-75 relative pointer-events-auto ${win.isMaximized ? 'w-full !rounded-none h-full' : ''}`}
-                style={{
-                    width: win.isMaximized ? '100%' : win.size.width,
-                    height: win.isMaximized ? '100%' : win.size.height,
-                    zIndex: win.zIndex,
-                    position: 'absolute',
-                    // Apply native-like glassmorphism
-                    background: 'rgba(30, 30, 30, 0.70)', // MacOS Dark Base
-                    backdropFilter: 'blur(25px) saturate(180%)', // Heavy blur
-                    WebkitBackdropFilter: 'blur(25px) saturate(180%)',
-                    boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1), 0 20px 50px rgba(0, 0, 0, 0.55)', // Inner ring + Deep shadow
-                    ...(win.isMaximized ? { top: '2rem', left: 0, height: 'calc(100% - 6rem)', borderRadius: 0 } : {})
-                }}
+                className={`flex flex-col overflow-hidden shadow-2xl transition-all duration-75 relative pointer-events-auto ${(win.isMaximized || isKioskMode) ? 'w-full !rounded-none h-full' : 'rounded-xl'}`}
+                style={getWindowStyle()}
                 onMouseDown={() => focusWindow(win.id)}
             >
                 {renderWindowContent()}
@@ -152,3 +184,4 @@ const WindowFrame = ({ window: win, isTopRanked, children }) => {
 };
 
 export default WindowFrame;
+

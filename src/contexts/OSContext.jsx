@@ -111,8 +111,14 @@ export const OSProvider = ({ children }) => {
         setWindows(prev => prev.map(w => w.id === id ? { ...w, size: newSize } : w));
     };
 
+    // Update window internal state (used by ModelViewerApp)
     const updateWindowState = (id, newState) => {
         setWindows(prev => prev.map(w => w.id === id ? { ...w, state: { ...w.state, ...newState } } : w));
+    };
+
+    // Update window properties (used by MenuBar for WelcomeApp)
+    const updateWindow = (id, updates) => {
+        setWindows(prev => prev.map(w => w.id === id ? { ...w, ...updates } : w));
     };
 
     // --- Application Registry (Mapping string names to components if needed) ---
@@ -129,7 +135,8 @@ export const OSProvider = ({ children }) => {
             brightness, setBrightness,
             windowStyle, setWindowStyle,
             serverStatus, setServerStatus,
-            updateWindowState, // Export function
+            updateWindowState,
+            updateWindow, // New function to update window properties
             moveWindow: (id, position) => {
                 setWindows(prev => prev.map(w => w.id === id ? { ...w, position } : w));
             }
