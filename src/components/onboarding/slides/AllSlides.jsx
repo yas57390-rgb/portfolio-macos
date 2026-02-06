@@ -98,7 +98,7 @@ export const IntroSlide = ({ onEnter }) => {
 };
 
 // SIE Logo colorMap: EXACT 10x10 grid pattern
-// Following user's precise instructions
+
 const W = '#FFFFFF';  // White
 const B = '#1E90FF';  // Blue
 const _ = 0;          // Empty (gap)
@@ -127,12 +127,33 @@ const sieLogoMap = [
 ];
 
 export const SIESlide = () => {
+    const scrollContainerRef = React.useRef(null);
+
+    // Handle arrow key scrolling
+    React.useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (!scrollContainerRef.current) return;
+            const scrollAmount = 80;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                scrollContainerRef.current.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                scrollContainerRef.current.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
     // Tuned parameters for Liquid Metal Effect
     const effectParams = {
         scale: 4,
         patternSharpness: 1,
         noiseScale: 0.5,
-        speed: 0.3,
+        speed: 0.15,
         liquid: 0.75,
         brightness: 3.5,
         contrast: 1.5,
@@ -147,16 +168,13 @@ export const SIESlide = () => {
         lightColor: "#ffffff",
         darkColor: "#cccccc",
         tintColor: "#ffffff",
-        mouseAnimation: true // Enable by default for presentation
+        mouseAnimation: false // Automatic looping animation
     };
 
     return (
         <div className="w-full h-full flex flex-col items-center select-none overflow-hidden">
-            {/* Title - Fixed at top */}
-            <h2 className="text-4xl font-semibold mb-6 text-white tracking-tight flex-shrink-0 drop-shadow-md z-10 text-center mt-2">Mon Alternance chez SIE</h2>
-
             {/* Main Content - 2 Column Grid */}
-            <div className="flex-1 w-full px-12 pb-8 overflow-hidden">
+            <div className="flex-1 w-full pl-12 pr-4 pb-8 pt-8 overflow-hidden">
                 <div className="grid grid-cols-[450px_1fr] gap-12 h-full">
 
                     {/* LEFT COLUMN - Sticky / Visual Anchor */}
@@ -195,7 +213,10 @@ export const SIESlide = () => {
                     </div>
 
                     {/* RIGHT COLUMN - Scrollable Content */}
-                    <div className="h-full overflow-y-auto scrollbar-hide pr-2 space-y-6">
+                    <div ref={scrollContainerRef} className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pl-2 pr-4 space-y-6">
+                        {/* Title - Now inside the right column */}
+                        <h2 className="text-4xl font-semibold text-white tracking-tight drop-shadow-md text-center mb-4">Mon Alternance chez SIE</h2>
+
                         {/* Header Text */}
                         <p className="text-xl text-gray-200 leading-relaxed font-light">
                             J'évolue actuellement au sein de <strong className="text-white font-semibold">SIE</strong>,

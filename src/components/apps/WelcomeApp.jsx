@@ -204,7 +204,7 @@ const WelcomeApp = ({ onClose, initialSlide = 0 }) => {
             </div>
 
             {/* Footer navigation */}
-            <div className="flex items-center justify-between px-6 py-4 bg-[#2a2a2a] border-t border-white/10 flex-shrink-0">
+            <div className="flex items-center justify-between px-6 py-2 bg-[#2a2a2a] border-t border-white/10 flex-shrink-0">
                 <button
                     onClick={prevSlide}
                     disabled={currentSlide === 0}
