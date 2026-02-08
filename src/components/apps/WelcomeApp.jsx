@@ -9,13 +9,13 @@ gsap.registerPlugin(ScrollTrigger);
 // Import slide content from AllSlides
 import {
     SIESlide, CVSlide, PortfolioSlide,
-    VeilleSlide, GuideSlide, ContactSlide
+    VeilleSlide, GuideSlide, ContactSlide, ProfileSlide
 } from '../onboarding/slides/AllSlides';
 import { CertifsSlide } from '../onboarding/slides/CertifsSlide';
 
 // Slide data with titles for navigation
 const SLIDES = [
-    { id: 'parcours', title: 'Mon Parcours', component: MonParcoursContent },
+    { id: 'profil', title: 'Profil', component: ProfileSlide },
     { id: 'sie', title: 'SIE', component: SIESlide },
     { id: 'cv', title: 'CV', component: CVSlide },
     { id: 'portfolio', title: 'Portfolio', component: PortfolioSlide },
@@ -204,11 +204,11 @@ const WelcomeApp = ({ onClose, initialSlide = 0 }) => {
             </div>
 
             {/* Footer navigation */}
-            <div className="flex items-center justify-between px-6 py-2 bg-[#2a2a2a] border-t border-white/10 flex-shrink-0">
+            <div className="flex items-center justify-between px-4 py-1.5 bg-[#2a2a2a] border-t border-white/10 flex-shrink-0 text-sm">
                 <button
                     onClick={prevSlide}
                     disabled={currentSlide === 0}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${currentSlide === 0
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${currentSlide === 0
                         ? 'opacity-30 cursor-not-allowed'
                         : 'hover:bg-white/10 text-white'
                         }`}
@@ -236,7 +236,7 @@ const WelcomeApp = ({ onClose, initialSlide = 0 }) => {
                 {currentSlide === SLIDES.length - 1 ? (
                     <button
                         onClick={handleFinish}
-                        className="flex items-center gap-2 px-6 py-2 rounded-lg bg-green-500 hover:bg-green-400 text-white font-medium transition-all"
+                        className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-green-500 hover:bg-green-400 text-white font-medium transition-all"
                     >
                         <span>Terminer</span>
                         <FaCheck size={12} />
@@ -244,7 +244,7 @@ const WelcomeApp = ({ onClose, initialSlide = 0 }) => {
                 ) : (
                     <button
                         onClick={nextSlide}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white transition-all"
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-400 text-white transition-all"
                     >
                         <span>Suivant</span>
                         <FaChevronRight size={12} />

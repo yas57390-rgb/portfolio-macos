@@ -2,16 +2,19 @@ import React from 'react';
 import Cubes from '../../ui/Cubes';
 import GlassContainer from '../GlassContainer';
 import MetallicPaint from '../../effects/MetallicPaint';
+import SIECubeLogo from '../../effects/SIECubeLogo';
+import MagicBento from './MagicBento';
+import { FaHeadset, FaCarSide, FaGraduationCap, FaShieldAlt, FaBoxOpen, FaBullseye, FaUserCheck } from 'react-icons/fa';
 
 // Shared layout for consistency
-const SlideContainer = ({ title, children, scrollable = false }) => (
-    <div className="w-full h-full flex flex-col items-center select-none">
+const SlideContainer = ({ title, children, scrollable = false, className = '', centered = false, maxWidth = 'max-w-5xl', noScroll = false }) => (
+    <div className={`w-full h-full flex flex-col items-center select-none ${className} ${centered ? 'justify-center' : ''}`}>
         {/* Title Area - Fixed position relative to content area */}
-        <h2 className="text-4xl font-semibold mb-6 text-white tracking-tight flex-shrink-0 drop-shadow-md z-10 text-center">{title}</h2>
+        {title && <h2 className="text-4xl font-semibold mb-6 text-white tracking-tight flex-shrink-0 drop-shadow-md z-10 text-center">{title}</h2>}
 
         {/* Content Area - Scrollable */}
-        <div className="flex-1 w-full max-w-5xl overflow-y-auto scrollbar-hide flex flex-col items-center">
-            <div className="w-full text-lg text-gray-200 space-y-6 leading-relaxed pb-4">
+        <div className={`${centered ? '' : 'flex-1'} w-full ${maxWidth} ${noScroll ? 'overflow-hidden' : 'overflow-y-auto scrollbar-hide'} flex flex-col items-center`}>
+            <div className="w-full h-full text-lg text-gray-200 space-y-6 leading-relaxed">
                 {children}
             </div>
         </div>
@@ -126,6 +129,26 @@ const sieLogoMap = [
     [W, W, W, W, W, W, B, B, B, B],
 ];
 
+export const ProfileSlide = () => (
+    <SlideContainer title={null} maxWidth="w-full" noScroll={true}>
+        <div className="w-full h-full flex items-center justify-center">
+            <MagicBento
+                textAutoHide={true}
+                enableStars={true}
+                enableSpotlight={true}
+                enableBorderGlow={true}
+                enableTilt={true}
+                enableMagnetism={true}
+                clickEffect={true}
+                spotlightRadius={220}
+                particleCount={12}
+                glowColor="132, 0, 255"
+                disableAnimations={false}
+            />
+        </div>
+    </SlideContainer>
+);
+
 export const SIESlide = () => {
     const scrollContainerRef = React.useRef(null);
 
@@ -173,8 +196,11 @@ export const SIESlide = () => {
 
     return (
         <div className="w-full h-full flex flex-col items-center select-none overflow-hidden">
+            {/* Title - Fixed at top */}
+            <h2 className="text-4xl font-semibold mb-6 text-white tracking-tight flex-shrink-0 drop-shadow-md z-10 text-center mt-2">Mon entreprise d'accueil</h2>
+
             {/* Main Content - 2 Column Grid */}
-            <div className="flex-1 w-full pl-12 pr-4 pb-8 pt-8 overflow-hidden">
+            <div className="flex-1 w-full px-12 pb-8 overflow-hidden">
                 <div className="grid grid-cols-[450px_1fr] gap-12 h-full">
 
                     {/* LEFT COLUMN - Sticky / Visual Anchor */}
@@ -192,122 +218,137 @@ export const SIESlide = () => {
 
                         {/* Company Info */}
                         <div className="mt-auto">
-                            <h1 className="text-6xl font-extrabold text-white tracking-tight mb-2">SIE</h1>
-                            <p className="text-blue-300 text-lg font-medium mb-4">Solutions Informatiques et Expertises</p>
+                            <h1 className="text-5xl font-extrabold text-white tracking-tight mb-2">SIE Grand-Est</h1>
+                            <p className="text-blue-300 text-lg font-medium mb-4">Groupe SIE (50 collaborateurs)</p>
 
                             <div className="space-y-3 border-t border-white/10 pt-6">
                                 <div className="flex justify-between items-center text-sm text-gray-300">
-                                    <span>Domaines</span>
-                                    <span className="font-semibold text-white">Infogérance • Audit • Formation</span>
+                                    <span>Équipe locale</span>
+                                    <span className="font-semibold text-white">20 techniciens</span>
                                 </div>
                                 <div className="flex justify-between items-center text-sm text-gray-300">
-                                    <span>Envergure</span>
-                                    <span className="font-semibold text-white">+230 organisations</span>
+                                    <span>Clients</span>
+                                    <span className="font-semibold text-white">+200 (PME, Collectivités)</span>
                                 </div>
                                 <div className="flex justify-between items-center text-sm text-gray-300">
-                                    <span>Parc géré</span>
-                                    <span className="font-semibold text-white">+2000 postes</span>
+                                    <span>Expertise</span>
+                                    <span className="font-semibold text-white">Infogérance & Cyber</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* RIGHT COLUMN - Scrollable Content */}
-                    <div ref={scrollContainerRef} className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pl-2 pr-4 space-y-6">
-                        {/* Title - Now inside the right column */}
-                        <h2 className="text-4xl font-semibold text-white tracking-tight drop-shadow-md text-center mb-4">Mon Alternance chez SIE</h2>
-
+                    <div ref={scrollContainerRef} className="h-full flex flex-col gap-4 pr-1 overflow-hidden">
                         {/* Header Text */}
-                        <p className="text-xl text-gray-200 leading-relaxed font-light">
-                            J'évolue actuellement au sein de <strong className="text-white font-semibold">SIE</strong>,
-                            une ESN à taille humaine où j'ai pu transformer mon stage en alternance.
-                        </p>
+                        <div className="bg-white/5 p-5 rounded-2xl border border-white/10 shrink-0">
+                            <h3 className="text-lg font-bold text-white mb-2">L'Entreprise</h3>
+                            <p className="text-gray-300 leading-relaxed">
+                                ESN spécialisée en infogérance, cybersécurité et infrastructures réseau.
+                                Nous accompagnons plus de <strong className="text-white">200 clients</strong> sur le Grand-Est,
+                                allant des PME aux collectivités et associations.
+                            </p>
+                        </div>
 
-                        {/* Mon Parcours */}
-                        <div className="bg-gradient-to-r from-[#1E293B] to-[#0F172A] p-6 rounded-2xl border border-white/10 shadow-lg relative overflow-hidden group hover:border-blue-500/30 transition-colors">
-                            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-500"></div>
-                            <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-                                <span className="text-blue-400">01.</span> Mon Parcours
-                            </h3>
-                            <div className="flex items-center gap-4 text-sm text-gray-300 bg-black/20 p-3 rounded-lg border border-white/5">
-                                <div className="flex-1 text-center">
-                                    <span className="block text-xs uppercase tracking-wide text-gray-500 mb-1">Été 2024</span>
-                                    <strong className="text-white bg-white/10 px-2 py-0.5 rounded">Stage</strong>
-                                </div>
-                                <div className="text-gray-600">➔</div>
-                                <div className="flex-1 text-center">
-                                    <span className="block text-xs uppercase tracking-wide text-gray-500 mb-1">Depuis Sept. 2025</span>
-                                    <strong className="text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">Alternance</strong>
-                                </div>
+                        {/* Organisation 50/50 */}
+                        <div className="grid grid-cols-2 gap-4 shrink-0">
+                            <div className="bg-blue-500/10 p-5 rounded-2xl border border-blue-500/20 flex flex-col items-center text-center">
+                                <FaHeadset className="text-4xl mb-3 text-blue-400" />
+                                <h4 className="text-xl font-bold text-white">50% Helpdesk</h4>
+                                <p className="text-sm text-blue-200 mt-1">Équipe de 4 personnes</p>
+                            </div>
+                            <div className="bg-purple-500/10 p-5 rounded-2xl border border-purple-500/20 flex flex-col items-center text-center">
+                                <FaCarSide className="text-4xl mb-3 text-purple-400" />
+                                <h4 className="text-xl font-bold text-white">50% Itinérance</h4>
+                                <p className="text-sm text-purple-200 mt-1">Avec 2 techniciens confirmés</p>
                             </div>
                         </div>
 
-                        {/* Mon Rôle - Grid Layout */}
-                        <div className="bg-[#1E1E24] p-6 rounded-2xl border border-white/10 shadow-lg">
-                            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <span className="text-purple-400">02.</span> Mon Rôle : Technicien S&R
-                            </h3>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors">
-                                    <div className="text-purple-400 text-xl mb-2">🆘</div>
-                                    <strong className="block text-white text-sm">Helpdesk N1/N2</strong>
-                                    <span className="text-xs text-gray-400">Résolution tickets & assistance</span>
-                                </div>
-                                <div className="bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors">
-                                    <div className="text-blue-400 text-xl mb-2">🚗</div>
-                                    <strong className="block text-white text-sm">Itinérance</strong>
-                                    <span className="text-xs text-gray-400">Interventions sur site client</span>
-                                </div>
-                                <div className="bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors">
-                                    <div className="text-green-400 text-xl mb-2">🚀</div>
-                                    <strong className="block text-white text-sm">Déploiement</strong>
-                                    <span className="text-xs text-gray-400">Postes, NAS, Firewalls, Switchs</span>
-                                </div>
-                                <div className="bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors">
-                                    <div className="text-orange-400 text-xl mb-2">🔌</div>
-                                    <strong className="block text-white text-sm">Infrastructure</strong>
-                                    <span className="text-xs text-gray-400">Câblage & Baies de brassage</span>
-                                </div>
+                        {/* Encadrement */}
+                        <div className="flex flex-col gap-2 text-sm text-gray-400 px-2">
+                            <strong className="text-white text-md border-b border-green-500/30 self-start pb-1 mb-1">Mon positionnement hiérarchique</strong>
+                            <div className="flex items-center gap-4">
+                                <span className="flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                                    Resp. Helpdesk (N+1)
+                                </span>
+                                <span className="flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                                    Directeur Technique (N+2)
+                                </span>
                             </div>
                         </div>
 
-                        {/* Split Section: Avantages & Outils */}
-                        <div className="grid grid-cols-1 gap-6">
-                            {/* NinjaOne */}
-                            <div className="bg-gradient-to-br from-[#2D1B14] to-[#1A100C] p-5 rounded-2xl border border-orange-500/20 shadow-lg relative overflow-hidden">
-                                <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl rotate-12">🥷</div>
-                                <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2 relative z-10">
-                                    <span className="text-orange-500">⚡</span> NinjaOne
+                        {/* Missions Détaillées */}
+                        <div className="grid grid-cols-2 gap-4 shrink-0">
+                            {/* Helpdesk */}
+                            <div className="bg-[#1E1E24] p-5 rounded-2xl border border-white/10 flex flex-col justify-center">
+                                <h3 className="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
+                                    <span>Au Helpdesk</span>
                                 </h3>
-                                <p className="text-sm text-gray-300 mb-3 relative z-10">Notre couteau suisse RMM pour la gestion de parc unifiée.</p>
-                                <div className="flex flex-wrap gap-2 relative z-10">
-                                    <span className="text-xs font-mono bg-orange-500/20 text-orange-200 px-2 py-1 rounded border border-orange-500/30">Monitoring</span>
-                                    <span className="text-xs font-mono bg-orange-500/20 text-orange-200 px-2 py-1 rounded border border-orange-500/30">Patching</span>
-                                    <span className="text-xs font-mono bg-orange-500/20 text-orange-200 px-2 py-1 rounded border border-orange-500/30">Remote</span>
-                                </div>
+                                <ul className="space-y-3 text-sm text-gray-300">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-blue-500 mt-1">▸</span>
+                                        <span>Support N1/N2 : <strong>Résolution d'incidents Système & Réseau</strong></span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-blue-500 mt-1">▸</span>
+                                        <span><strong>Administration Active Directory</strong> (Utilisateurs, GPO) & M365</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-blue-500 mt-1">▸</span>
+                                        <span>Sécurité & Accès : <strong>Configuration MFA, Filtrage Mail (Mailinblack) & Règles Pare-feu</strong></span>
+                                    </li>
+                                </ul>
                             </div>
 
-                            {/* Avantages ESN */}
-                            <div className="bg-[#1A1A2E] p-5 rounded-2xl border border-white/10 shadow-lg">
-                                <h3 className="text-lg font-bold text-white mb-3">La Force de l'ESN</h3>
-                                <ul className="space-y-3">
-                                    <li className="flex items-start gap-3">
-                                        <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 text-xs mt-0.5">1</div>
-                                        <span className="text-sm text-gray-300">
-                                            <strong className="text-white block">Diversité Technique</strong>
-                                            Pas de routine : chaque client a son infra spécifique (Cisco, Ubiquiti, Sophos...).
-                                        </span>
+                            {/* Itinérance */}
+                            <div className="bg-[#1E1E24] p-5 rounded-2xl border border-white/10 flex flex-col justify-center">
+                                <h3 className="text-lg font-bold text-purple-400 mb-4 flex items-center gap-2">
+                                    <span>En Itinérance</span>
+                                </h3>
+                                <ul className="space-y-3 text-sm text-gray-300">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-purple-500 mt-1">▸</span>
+                                        <span><strong>Déploiement & Maintenance</strong> de postes de travail</span>
                                     </li>
-                                    <li className="flex items-start gap-3">
-                                        <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-xs mt-0.5">2</div>
-                                        <span className="text-sm text-gray-300">
-                                            <strong className="text-white block">Autonomie accélérée</strong>
-                                            Responsabilités réelles sur des incidents critiques dès la première année.
-                                        </span>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-purple-500 mt-1">▸</span>
+                                        <span>Installation <strong>Serveurs NAS & Équipements Réseau</strong> (Switch/Bornes)</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-purple-500 mt-1">▸</span>
+                                        <span><strong>Audits SI</strong> & Prise en main d'infrastructure</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-purple-500 mt-1">▸</span>
+                                        <span>Câblage & Gestion d'<strong>incidents critiques</strong></span>
                                     </li>
                                 </ul>
                             </div>
                         </div>
+
+                        {/* Stack Technologique */}
+                        <div className="bg-[#1A1A2E] p-5 rounded-2xl border border-white/10 shrink-0 mt-auto">
+                            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Stack Technologique</h3>
+                            <div className="flex flex-wrap gap-2">
+                                <span className="bg-blue-600/20 text-blue-300 px-3 py-1.5 rounded-lg text-sm border border-blue-600/30">Windows Server</span>
+                                <span className="bg-blue-600/20 text-blue-300 px-3 py-1.5 rounded-lg text-sm border border-blue-600/30">Active Directory</span>
+                                <span className="bg-blue-600/20 text-blue-300 px-3 py-1.5 rounded-lg text-sm border border-blue-600/30">Hyper-V</span>
+
+                                <span className="bg-orange-600/20 text-orange-300 px-3 py-1.5 rounded-lg text-sm border border-orange-600/30">Aruba (Switch/WiFi)</span>
+                                <span className="bg-orange-600/20 text-orange-300 px-3 py-1.5 rounded-lg text-sm border border-orange-600/30">Stormshield</span>
+
+                                <span className="bg-sky-600/20 text-sky-300 px-3 py-1.5 rounded-lg text-sm border border-sky-600/30">Microsoft 365</span>
+                                <span className="bg-sky-600/20 text-sky-300 px-3 py-1.5 rounded-lg text-sm border border-sky-600/30">OVH</span>
+
+                                <span className="bg-red-600/20 text-red-300 px-3 py-1.5 rounded-lg text-sm border border-red-600/30">NinjaOne (RMM)</span>
+                                <span className="bg-red-600/20 text-red-300 px-3 py-1.5 rounded-lg text-sm border border-red-600/30">Trend Micro</span>
+                                <span className="bg-red-600/20 text-red-300 px-3 py-1.5 rounded-lg text-sm border border-red-600/30">Mailinblack</span>
+                            </div>
+                        </div>
+
+
 
                     </div>
                 </div>
@@ -526,7 +567,7 @@ export const ContactSlide = () => {
 
         // Typing delay then Bot asks for Email
         setTimeout(() => {
-            setChatHistory(prev => [...prev, { type: 'system', text: "Bien reçu ! 📨 Pour que Yassine puisse vous recontacter, quelle est votre adresse email ?" }]);
+            setChatHistory(prev => [...prev, { type: 'system', text: "Bien reçu ! Pour que Yassine puisse vous recontacter, quelle est votre adresse email ?" }]);
             setStep(1);
         }, 800);
     };
@@ -558,7 +599,11 @@ export const ContactSlide = () => {
                 });
 
                 if (response.ok) {
-                    setChatHistory(prev => [...prev, { type: 'system', text: "C'est envoyé ! Yassine vous répondra très vite. 🚀" }]);
+                    setChatHistory(prev => [
+                        ...prev,
+                        { type: 'system', text: "C'est envoyé ! Yassine vous répondra très vite." },
+                        { type: 'system', text: "Vous pouvez maintenant cliquer sur Terminer pour accéder à mon système. Une démo vidéo se lancera sur le bureau pour vous guider." }
+                    ]);
                     setStep(2); // Done
                     setStatus('success');
                     playSentSound();
@@ -574,8 +619,8 @@ export const ContactSlide = () => {
     };
 
     return (
-        <SlideContainer title="Restons en Contact">
-            <div className="max-w-md mx-auto mt-6 w-full font-sans shadow-2xl rounded-2xl overflow-hidden flex flex-col h-[450px] bg-black/40 backdrop-blur-xl border border-white/10 transition-all duration-500">
+        <SlideContainer title="Restons en Contact" centered={true}>
+            <div className="max-w-xl mx-auto w-full font-sans shadow-2xl rounded-2xl overflow-hidden flex flex-col h-[550px] bg-black/40 backdrop-blur-xl border border-white/10 transition-all duration-500">
                 {/* iMessage Header */}
                 <div className="bg-white/5 p-4 border-b border-white/5 flex flex-col items-center justify-center relative shrink-0">
                     <div className="w-10 h-10 rounded-full bg-gray-500/50 flex items-center justify-center text-white text-xs mb-1 shadow-inner border border-white/5">YD</div>

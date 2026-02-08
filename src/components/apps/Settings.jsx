@@ -20,6 +20,7 @@ const Settings = () => {
                     <option value="orb" className="bg-slate-800">Orb</option>
                     <option value="dot-grid" className="bg-slate-800">Dot Grid</option>
                     <option value="liquid-ether" className="bg-slate-800">Liquid Ether</option>
+                    <option value="antigravity" className="bg-slate-800">Antigravity</option>
                 </select>
             </div>
 

@@ -130,17 +130,19 @@ const WindowFrame = ({ window: win, isTopRanked, children }) => {
     const renderWindowContent = () => (
         <>
             {/* Title Bar */}
-            <div className={getTitleBarClass()}>
-                <div className="flex space-x-2 group">
-                    <button onClick={(e) => { e.stopPropagation(); closeWindow(win.id); }} className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 flex justify-center items-center text-xs text-black/50">x</button>
-                    <button onClick={(e) => { e.stopPropagation(); minimizeWindow(win.id); }} className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 flex justify-center items-center text-xs text-black/50">-</button>
-                    <button onClick={(e) => { e.stopPropagation(); maximizeWindow(win.id); }} className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 flex justify-center items-center text-xs text-black/50">+</button>
+            {!win.hideTitleBar && (
+                <div className={getTitleBarClass()}>
+                    <div className="flex space-x-2 group">
+                        <button onClick={(e) => { e.stopPropagation(); closeWindow(win.id); }} className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 flex justify-center items-center text-xs text-black/50">x</button>
+                        <button onClick={(e) => { e.stopPropagation(); minimizeWindow(win.id); }} className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 flex justify-center items-center text-xs text-black/50">-</button>
+                        <button onClick={(e) => { e.stopPropagation(); maximizeWindow(win.id); }} className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 flex justify-center items-center text-xs text-black/50">+</button>
+                    </div>
+                    <div className={getTitleTextClass()}>
+                        {win.title}
+                    </div>
+                    <div className="w-16"></div>
                 </div>
-                <div className={getTitleTextClass()}>
-                    {win.title}
-                </div>
-                <div className="w-16"></div>
-            </div>
+            )}
 
             {/* Content */}
             <div className={getContentClass()}>

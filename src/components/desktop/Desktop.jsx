@@ -15,6 +15,7 @@ import Squares from '../ui/Squares';
 import Orb from '../ui/Orb';
 import DotGrid from '../ui/DotGrid';
 import LiquidEther from '../ui/LiquidEther';
+import Antigravity from '../ui/Antigravity';
 import DesktopWidgets from '../widgets/DesktopWidgets';
 
 const Desktop = ({ isOnboarding, onboardingStep, onStepChange }) => {
@@ -111,8 +112,30 @@ const Desktop = ({ isOnboarding, onboardingStep, onStepChange }) => {
                 </div>
             )}
 
+            {wallpaper === 'antigravity' && (
+                <div className="absolute inset-0 z-0 bg-black">
+                    <Antigravity
+                        count={300}
+                        magnetRadius={6}
+                        ringRadius={7}
+                        waveSpeed={0.4}
+                        waveAmplitude={1}
+                        particleSize={1.5}
+                        lerpSpeed={0.05}
+                        color="#ffffff"
+                        autoAnimate
+                        particleVariance={1}
+                        rotationSpeed={0}
+                        depthFactor={1}
+                        pulseSpeed={3}
+                        particleShape="capsule"
+                        fieldStrength={10}
+                    />
+                </div>
+            )}
+
             {/* Dark Mode Overlay - Hide for animated wallpapers to preserve vibrancy */}
-            {theme === 'dark' && !['color-bends', 'squares', 'orb', 'dot-grid', 'default'].includes(wallpaper) && (
+            {theme === 'dark' && !['color-bends', 'squares', 'orb', 'dot-grid', 'default', 'liquid-ether', 'antigravity'].includes(wallpaper) && (
                 <div className="absolute inset-0 bg-black/30 pointer-events-none transition-opacity duration-500" />
             )}
 

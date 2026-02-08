@@ -51,6 +51,7 @@ const DesktopWithWelcome = ({ showLockScreen, onLockScreenComplete }) => {
         isKioskMode: true, // Mode plein écran spécial
         initialSlide: initialSlide,
         defaultSize: { width: 900, height: 650 },
+        hideTitleBar: true,
       });
     }
   }, [openWindow, welcomeOpened]);
